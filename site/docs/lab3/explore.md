@@ -4,135 +4,135 @@ sidebar_position: 2
 
 import OtelSemconv from '@site/src/components/OtelSemconv';
 
-# 3.2. Investigate a fully instrumented system with Grafana Assistant
+# 3.2. Grafana Assistant で計装済みシステムを調査する
 
-In this lab, you'll investigate a fully instrumented microservices application in Grafana Cloud with **Grafana Assistant**. Grafana Assistant is a purpose-built LLM assistant that can help you understand your Grafana environment, troubleshoot incidents, and make recommendations.
+このラボでは、**Grafana Assistant** を使って Grafana Cloud 上で完全に計装されたマイクロサービスアプリケーションを調査します。Grafana Assistant は、Grafana 環境の理解、インシデントのトラブルシューティング、推奨事項の提示を支援する専用の LLM アシスタントです。
 
-In this lab we've deployed the [OpenTelemetry Demo][1] — a production-grade system where services are exporting OpenTelemetry traces, metrics and logs.
+このラボでは [OpenTelemetry Demo][1] をデプロイしています — 各サービスが OpenTelemetry のトレース、メトリクス、ログをエクスポートする本番グレードのシステムです。
 
-Your goal in this mission is to use Grafana Assistant to understand the system, identify patterns, and gain useful insights.
+このミッションの目標は、Grafana Assistant を使ってシステムを理解し、パターンを特定し、有用なインサイトを得ることです。
 
-![Astronomy Shop homepage](/img/oteldemo_homepage.png)
+![Astronomy Shop のホームページ](/img/oteldemo_homepage.png)
 
-## Step 1: Get ready
+## Step 1: 準備
 
-Log on to the environment to get started:
+環境にログインして始めましょう:
 
-1.  Go to the **Reference Grafana URL** that you have been given (Hint: the URL looks like `https://abcd12appenv.grafana.net`).
+1.  提供された **Reference Grafana の URL** にアクセスします（ヒント: URL は `https://abcd12appenv.grafana.net` のような形式です）。
 
-1.  If you are presented with a choice of sign-in options, click **Sign in with SSO**.
+1.  サインイン方法の選択画面が表示されたら、**Sign in with SSO** をクリックします。
 
-1.  At the _Authentication_ login screen, enter the **username** (not email) and **password** that you received by email, or from your instructor.
+1.  _Authentication_ ログイン画面で、メールまたはインストラクターから受け取った **ユーザー名**（メールアドレスではなく）と **パスワード** を入力します。
 
-## Step 2: How to access Grafana Assistant
+## Step 2: Grafana Assistant へのアクセス方法
 
-In this step, you'll see the many ways you can access Grafana Assistant from within Grafana.
+このステップでは、Grafana 内から Grafana Assistant にアクセスするさまざまな方法を確認します。
 
-### Top bar
+### トップバー
 
-Grafana Assistant can be opened from the always-present top bar of Grafana.
+Grafana の常に表示されるトップバーから Grafana Assistant を開けます。
 
-![Grafana Assistant in the top bar](/img/assistant_topbar.png)
+![トップバーの Grafana Assistant](/img/assistant_topbar.png)
 
-This opens a side drawer within Grafana, and you can always interact with it this way.
+Grafana 内にサイドドロワーが開き、いつでもここから操作できます。
 
-### Main Menu
+### メインメニュー
 
-Within Grafana's Main Menu, you can see an item called Assistant. Clicking that takes you to the Assistant App.
+Grafana のメインメニューに Assistant という項目があります。クリックすると Assistant アプリに移動します。
 
-![Grafana Assistant app](/img/assistant_app.png)
+![Grafana Assistant アプリ](/img/assistant_app.png)
 
-From here, you can use it like a search bar and interact with Assistant.
+ここから検索バーのように使って Assistant とやり取りできます。
 
-### Everywhere else
+### その他の場所
 
-Grafana Assistant is available throughout all of Grafana. Whenever you see the two stars, like in the top bar, you can click them and Assistant will be there to help you.
+Grafana Assistant は Grafana 全体で利用可能です。トップバーにあるような 2 つの星のアイコンが表示されるところでは、クリックすれば Assistant が対応してくれます。
 
-## Step 3: Using Assistant
+## Step 3: Assistant を使う
 
-Grafana Assistant knows everything about Grafana and its surrounding ecosystem. This ranges from instrumentation, exploration, investigation, root cause analysis and general usage of Grafana. 
+Grafana Assistant は Grafana とそのエコシステムについて幅広い知識を持っています。計装、探索、調査、根本原因分析、Grafana の一般的な使い方まで対応しています。
 
-You can ask it to create alerts, dashboards and queries. You can ask it to share best practices so you can learn and enhance your skill set. You can ask it to connect to external systems via MCP, and much more. You can even bring your own context through Skills, rules, memories and more — although these are out of scope for this workshop.
+アラートやダッシュボード、クエリの作成を依頼できます。ベストプラクティスの共有を求めることで、スキルアップにも活用できます。MCP 経由で外部システムへの接続も可能で、それ以外にも多くのことができます。Skills、ルール、メモリなどで独自のコンテキストを持ち込むこともできますが、それはこのワークショップの範囲外です。
 
 :::note
-Due to the variable nature of an LLM assistant, the results will not always look the same between users or match what we found in previous exercises. If Assistant doesn't do what you want it to do, prompt it some more to nudge it in the right direction.
+LLM アシスタントの性質上、結果はユーザー間で常に同じになるとは限らず、以前の演習で得た結果と一致しない場合もあります。Assistant が期待通りに動作しない場合は、追加のプロンプトで方向を調整してください。
 :::
 
-### How many services are running?
+### 実行中のサービスは何個？
 
-Open Assistant and ask it:
+Assistant を開いて、以下のように聞いてみましょう:
 
 > How many services are running? For each service, tell me its name, version, cloud provider, region and k8s node it's running in.
 
-This shows how Assistant thinks through the request — "thinking" is always shown. You can then see how it queries Grafana itself. It might query metrics, knowledge graph, logs, traces, profiles and more.
+Assistant がリクエストをどのように考えているかが表示されます — 「thinking」は常に表示されます。Grafana 自体に対してどのようにクエリを実行しているかも確認できます。メトリクス、ナレッジグラフ、ログ、トレース、プロファイルなどにクエリを実行することがあります。
 
-### Let's break something
+### 何かを壊してみよう
 
-To make for a more interesting scenario, let's break a few things. 
+より面白いシナリオにするため、いくつかのものを意図的に壊してみましょう。
 
-1.  Go to the **Field Eng Otel Environment** dashboard folder and open the **Feature Flags** dashboard. 
+1.  **Field Eng Otel Environment** ダッシュボードフォルダに移動し、**Feature Flags** ダッシュボードを開きます。
 
-2.  In our demo environment, we've added many failure scenarios so things break in wonderful ways. 
+2.  デモ環境には多くの障害シナリオが用意されています。
 
-    Turn on the `productCatalogReadFromPostgres` and `productCatalogStopClosingPostgresConnections` feature flags by pressing the `enable` button.
+    `productCatalogReadFromPostgres` と `productCatalogStopClosingPostgresConnections` のフィーチャーフラグを `enable` ボタンで有効にします。
 
-3.  Give it a few minutes to start degrading...
+3.  数分待って、サービスが徐々に劣化し始めるのを待ちます...
 
-In the meantime, let's understand the instrumentation health of our services.
+その間に、サービスの計装の健全性を確認しましょう。
 
-### Explore semantic correctness
+### セマンティックの正確性を確認する
 
-Ask Assistant something like:
+Assistant に以下のように聞いてみましょう:
 
 > Are my services using OpenTelemetry semantics correctly?
 
-Assistant will analyse the data and understand what attributes are being used. You can see here that it advises us that the application is using the old semantic convention. It outlines what's correct and the attribute that should have been used instead:
+Assistant はデータを分析し、使用されている属性を理解します。アプリケーションが古いセマンティック規約を使用していることをアドバイスし、正しいものと代わりに使用すべき属性を示してくれます:
 
-![Assistant checking semantic correctness](/img/assistant_semanticcorrectness.png)
+![Assistant がセマンティックの正確性をチェック](/img/assistant_semanticcorrectness.png)
 
-### Are they healthy?
+### サービスは健全？
 
-Now things should be nice and broken...
+そろそろ壊れているはずです...
 
-Ask Assistant:
+Assistant に聞いてみましょう:
 
 > How healthy are the services in the `ditl-demo-prod` k8s namespace?
 
-This is a more in-depth question, and Assistant will likely spin up multiple agents to do this asynchronously. As before, it will look for all the services in Knowledge Graph, look to understand what data sources are available and then query metrics, logs and traces to determine the health. 
+これはより深い質問で、Assistant は非同期に複数のエージェントを起動する可能性があります。先ほどと同様に、ナレッジグラフでサービスを検索し、利用可能なデータソースを把握してから、メトリクス、ログ、トレースにクエリを実行してヘルス状態を判断します。
 
-For each tool call, you can inspect the parameters and queries, as well as the thinking for each step of the investigation. 
+各ツール呼び出しについて、パラメータやクエリ、各調査ステップの思考プロセスを確認できます。
 
-As part of Assistant's response to your question, it will likely check to see if any alerts are firing and the state of SLOs also.
+質問への回答の一部として、アラートが発火しているかどうかや SLO の状態も確認する可能性があります。
 
-The result looks something like this:
+結果は以下のようになります:
 
-![Assistant showing service health](/img/assistant_health.png)
+![Assistant がサービスのヘルスを表示](/img/assistant_health.png)
 
 :::tip
 
-From here, you can ask follow-up questions — you could ask it to create alerts based on conditions and much more. Or, you could ask it to create a dashboard to summarise these issues.
+ここからフォローアップの質問ができます — 条件に基づくアラートの作成を依頼したり、これらの問題をまとめるダッシュボードの作成を依頼したりできます。
 
 :::
 
-### Finish troubleshooting
+### トラブルシューティングの続き
 
-Let's continue with the debug process. This environment has been connected to a GitHub repo. Let's ask Assistant to investigate why the product catalog service is crash looping. Doing so results in a great investigative process:
+デバッグプロセスを続けましょう。この環境は GitHub リポジトリに接続されています。product catalog サービスがクラッシュループしている原因を Assistant に調査させてみましょう。これにより、優れた調査プロセスが展開されます:
 
-![Assistant investigating the product catalog](/img/assistant_productacatalog.png)
+![Assistant が product catalog を調査](/img/assistant_productacatalog.png)
 
-This environment has been connected to a GitHub repo. From here, you could:
+この環境は GitHub リポジトリに接続されているので、ここから以下のことができます:
 
-- ask for a PR to be raised
-- ask for an example of what to update the code to
+- PR の作成を依頼する
+- コードの修正例を提示してもらう
 
-## Wrapping up
+## まとめ
 
-In this lab, you've learned how to access Grafana Assistant in Grafana Cloud, and use it to:
+このラボでは、Grafana Cloud で Grafana Assistant にアクセスし、以下のことに活用する方法を学びました:
 
-- Query and analyze service health across metrics, logs, traces and profiles
+- メトリクス、ログ、トレース、プロファイルを横断したサービスヘルスのクエリと分析
 
-- Validate OpenTelemetry semantic convention compliance and identify instrumentation gaps
+- OpenTelemetry セマンティック規約の準拠状況の検証と計装のギャップの特定
 
-- Investigate service failures and crash loops, and propose code changes
+- サービス障害やクラッシュループの調査と、コード変更の提案
 
 [1]: https://github.com/grafana/opentelemetry-demo

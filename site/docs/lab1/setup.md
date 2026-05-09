@@ -2,61 +2,61 @@
 sidebar_position: 1
 ---
 
-# 1.1. Initialize your environment
+# 1.1. 環境の初期設定
 
-## Step 1: Log on to Grafana (Sandbox)
+## Step 1: Grafana（Sandbox）にログイン
 
-You've been given access to **two** Grafana Cloud instances for this workshop.
+このワークショップでは **2つ** の Grafana Cloud インスタンスが提供されています。
 
-In this lab, we'll be working in the **Sandbox** instance.
+このラボでは **Sandbox** インスタンスを使用します。
 
-1.  Go to the **Sandbox Grafana URL** that you have been given (looks like: `https://abcd12.grafana.net`).
+1.  提供された **Sandbox Grafana の URL**（`https://abcd12.grafana.net` のような形式）にアクセスします。
 
-1.  If you are presented with a choice of sign-in options, click **Sign in with SSO**.
+1.  サインイン方法の選択画面が表示されたら、**Sign in with SSO** をクリックします。
 
-1.  At the _Grafana Labs Workshops_ login screen, enter the **username** (not email) and **password** that you received by email, or from your instructor.
+1.  _Grafana Labs Workshops_ のログイン画面で、メールまたはインストラクターから受け取った **ユーザー名**（メールアドレスではなく）と **パスワード** を入力します。
 
     :::info
 
-    If you didn't receive a username and password, please speak to your friendly instructor!
+    ユーザー名とパスワードが届いていない場合は、インストラクターにお声がけください！
 
     :::
 
-## Step 2: Log on to your IDE
+## Step 2: IDE にログイン
 
-You've also been given access to an online development environment. You'll be using this to complete the lab exercises.
+オンライン開発環境も提供されています。これを使ってラボの演習を行います。
 
-1.  Go to the **IDE URL** that has been shared with you. 
+1.  共有された **IDE の URL** にアクセスします。
 
-1.  Click **Launch OpenTelemetry Workshop**. (Or click **Login** if you have not already logged in.)
+1.  **Launch OpenTelemetry Workshop** をクリックします（まだログインしていない場合は **Login** をクリック）。
 
-1.  Verify that your lab environment looks good.
+1.  ラボ環境が正しく表示されていることを確認します。
 
-1.  Change the theme to suit your preference: click on the **Command Palette** icon located in the top right:
+1.  お好みに合わせてテーマを変更します。右上の **コマンドパレット** アイコンをクリックします:
 
     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="currentColor"><path fill-rule="evenodd" d="M1.5 3L3 1.5h18L22.5 3v18L21 22.5H3L1.5 21zM3 3v18h18V3z" clip-rule="evenodd"/><path d="M7.06 7.5L6 8.56l4.243 4.243L6 17.046l1.06 1.06L12 13.168v-.728zm4.94 9h6V18h-6z"/></g></svg>
 
-    - Then type **theme** to find the Theme command in the list.
+    - **theme** と入力して、リストから Theme コマンドを見つけます。
 
-    - Then, select a theme of your choice. Light? Dark? Whatever you prefer!
+    - お好みのテーマを選びましょう。ライトでもダークでも OK です！
 
-## Step 3: Run the demo app
+## Step 3: デモアプリを実行
 
-In this first lab, we'll be working with demo application called _Rolldice_.
+この最初のラボでは、_Rolldice_ というデモアプリケーションを使います。
 
-Let's test out this app:
+さっそく動かしてみましょう:
 
-1.  Open your virtual development environment.
+1.  オンライン開発環境を開きます。
 
-1.  Launch a new Terminal by going to **Terminal -> New Terminal**
+1.  **Terminal -> New Terminal** で新しいターミナルを開きます。
 
-1.  In the terminal, run the following command to copy the first project into your persistent workspace:
+1.  ターミナルで以下のコマンドを実行し、最初のプロジェクトを永続ワークスペースにコピーします:
 
     ```
     cp -r /opt/rolldice persisted/
     ```
 
-1.  Then, run the following commands to start the application:
+1.  次に、以下のコマンドでアプリケーションを起動します:
 
     ```
     cd persisted/rolldice
@@ -64,25 +64,25 @@ Let's test out this app:
     ./run.sh
     ```
 
-    The application starts.
+    アプリケーションが起動します。
 
-1.  Create a second terminal, either using the split terminal icon (located at the right edge of the tab bar where "Terminal 1" is located), or by going to **Terminal -> New Terminal**.
+1.  2つ目のターミナルを作成します。タブバーの「Terminal 1」の右端にあるターミナル分割アイコンを使うか、**Terminal -> New Terminal** で開けます。
 
-1.  In the second terminal, use _curl_ to make a sample request to the rolldice service:
+1.  2つ目のターミナルで、_curl_ を使って rolldice サービスにリクエストを送ります:
 
     ```shell
     curl localhost:8080/rolldice
     ```
 
-    The rolldice service returns a random number.
+    rolldice サービスがランダムな数字を返します。
 
-1.  Change back to the first terminal by clicking on its tab, then press **Ctrl+C** to stop the application.
+1.  最初のターミナルのタブをクリックして戻り、**Ctrl+C** でアプリケーションを停止します。
 
-## Summary
+## まとめ
 
-You've just run the demo application that we'll use in this lab. However, the application is rather isolated, and so far un-observed! 
+このラボで使用するデモアプリを実行しました。しかし、現時点ではアプリは孤立しており、何も監視されていない状態です！
 
-In the next lab, we'll add OpenTelemetry instrumentation to the app, and begin shipping telemetry signals to Grafana Cloud.
+次のラボでは、アプリに OpenTelemetry の計装を追加し、Grafana Cloud へのテレメトリーシグナルの送信を開始します。
 
-Click on the next module below to proceed.
+下の次のモジュールをクリックして進みましょう。
 

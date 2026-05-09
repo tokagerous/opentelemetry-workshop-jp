@@ -2,29 +2,29 @@
 sidebar_position: 3
 ---
 
-# 4.3. Mission B: Enhance instrumentation
+# 4.3. ミッション B: 計装を強化する
 
-For this mission, you'll be taking your telemetry to the next level. The production team needs deeper insights into application behavior, and you'll be using the OpenTelemetry SDK to craft a _custom metric_ and _custom span attributes_ that deliver exactly what they need. 
+このミッションでは、テレメトリーを次のレベルに引き上げます。運用チームはアプリケーションの動作についてより深いインサイトを必要としており、OpenTelemetry SDK を使って _カスタムメトリクス_ と _カスタムスパン属性_ を作成し、必要な情報を正確に提供します。
 
-Let's dive in and see how a few lines of code can transform your monitoring capabilities.
+数行のコードで監視能力がどう変わるか、見ていきましょう。
 
-## Part 1: Add a custom metric
+## Part 1: カスタムメトリクスを追加する
 
-After the pain of the errors we saw in Lab 2, the operations team wants to be able to monitor how many times a game is won by either the computer or the player, or neither.
+Lab 2 で見たエラーを受けて、運用チームはゲームの勝者（コンピューター、プレイヤー、または引き分け）の回数を監視したいと考えています。
 
-### Define and increment the custom metric
-Let's add a custom OpenTelemetry metric to expose this information:
+### カスタムメトリクスの定義とインクリメント
+この情報を公開するために、カスタム OpenTelemetry メトリクスを追加しましょう:
 
-1.  Open **gameserver.go** in the code editor.
+1.  コードエディターで **gameserver.go** を開きます。
 
-1.  Update the **imports** at the top of the file, to add these opentelemetry packages:
+1.  ファイル先頭の **imports** を更新して、以下の opentelemetry パッケージを追加します:
 
     ```
     "go.opentelemetry.io/otel/attribute"
     "go.opentelemetry.io/otel/metric"
     ```
 
-1.  Inside the `var()` block, add these lines to declare a new **meter** object and variables to hold our counters:
+1.  `var()` ブロック内に、新しい **meter** オブジェクトとカウンター変数を宣言する行を追加します:
 
     ```
     meter = otel.Meter(schemaName)
@@ -33,7 +33,7 @@ Let's add a custom OpenTelemetry metric to expose this information:
     gamesCompletedCounter metric.Int64Counter
     ```
 
-1.  Now let's register two new counter metrics with the OpenTelemetry SDK. Add the following code after the **var ()** block and before `type gameRequest`
+1.  OpenTelemetry SDK に 2 つの新しいカウンターメトリクスを登録します。**var ()** ブロックの後、`type gameRequest` の前に以下のコードを追加します:
 
     ```go
     func init() {
@@ -59,94 +59,94 @@ Let's add a custom OpenTelemetry metric to expose this information:
     }
     ```
 
-1.  Now let's increment our "games started" counter. 
+1.  「ゲーム開始」カウンターをインクリメントしましょう。
 
-    Inside the `gameserver()` function, after we've initialized the tracer (with `tracer.Start()`), add the following line. This will increment our "games.started" counter -- in other words, a counter of all games played, whether they completed successfully or not:
+    `gameserver()` 関数内で、トレーサーの初期化（`tracer.Start()`）の後に、以下の行を追加します。これにより「games.started」カウンター（成功・失敗に関係なく、すべてのプレイ済みゲーム数）がインクリメントされます:
 
     ```go
     gamesStartedCounter.Add(r.Context(), 1, metric.WithAttributes())
     ```
 
-1.  Now increment the counter **after** the call to **getResult**. The following line of code will increment the counter and add an _attribute_ so that we can keep track of who won the game (which is stored in `resultCode`):
+1.  **getResult** の呼び出しの**後に**カウンターをインクリメントします。以下のコードはカウンターをインクリメントし、誰がゲームに勝ったか（`resultCode` に格納）を追跡するための _属性_ を追加します:
 
     ```go
     gamesCompletedCounter.Add(r.Context(), 1, metric.WithAttributes(attribute.String("winner", resultCode)))
     ```
 
-1.  In a terminal, reformat your code:
+1.  ターミナルでコードを整形します:
 
     ```
     go fmt
     ```
 
-1.  Now re-run your app, and re-run the k6 load test, if it isn't running.
+1.  アプリを再起動し、k6 の負荷テストが実行中でなければ再実行します。
 
-    Wait a few moments for the new OpenTelemetry metrics to be generated and pushed to Grafana Cloud via Alloy.
+    新しい OpenTelemetry メトリクスが生成され、Alloy 経由で Grafana Cloud にプッシュされるまでしばらく待ちます。
 
-### Find your custom metric in Grafana
+### Grafana でカスタムメトリクスを見つける
 
-1.  In Grafana, go to **Drilldown -> Metrics**.
+1.  Grafana で **Drilldown -> Metrics** に移動します。
 
-1.  Search for the string **game** and add a filter for **job** = **(your namespace)/gameserver**.
+1.  **game** という文字列で検索し、**job** = **(選んだ名前空間)/gameserver** のフィルターを追加します。
 
-    ![gameserver metrics in Metrics Drilldown](/img/exploremetrics_games.png)
+    ![Metrics Drilldown での gameserver メトリクス](/img/exploremetrics_games.png)
 
     :::opentelemetry-tip
 
-    Mimir and Prometheus use the `job` and `instance` labels, according the [OpenTelemetry compatibility specification with Prometheus and OpenMetrics][1].
+    Mimir と Prometheus は、[Prometheus および OpenMetrics との OpenTelemetry 互換性仕様][1]に従って `job` と `instance` ラベルを使用します。
 
-    This means that you can find your service using the `job` label, which joins the `service.namespace` and `service.name` attributes together, e.g. `mynamespace/myservice`.
+    つまり、`job` ラベルを使ってサービスを検索できます。このラベルは `service.namespace` と `service.name` 属性を結合したもので、例えば `mynamespace/myservice` のようになります。
 
     :::
 
-1.  Click the **games_completed_total** metric, then click the **winner** label to see wins broken down by computer vs player.
+1.  **games_completed_total** メトリクスをクリックし、**winner** ラベルをクリックして、コンピューター vs プレイヤーの勝利数を確認します。
 
-    This shows how your OpenTelemetry attribute (_winner_) appears as a Prometheus label, giving you a clear view of computer vs player victories. It almost looks like an even match!
+    OpenTelemetry 属性（_winner_）が Prometheus ラベルとして表示され、コンピューター対プレイヤーの勝敗が明確に分かります。ほぼ互角の勝負のようです！
 
-    ![gameserver metrics in Metrics Drilldown](/img/exploremetrics_games_winners.png)
+    ![Metrics Drilldown での gameserver 勝者メトリクス](/img/exploremetrics_games_winners.png)
 
 
 
-## Part 2: Add a custom span attribute
+## Part 2: カスタムスパン属性を追加する
 
-We can also add an attribute to a trace span. This helps to give further context about each request, which can be hugely useful in a troubleshooting situation.
+トレースのスパンに属性を追加することもできます。各リクエストに追加のコンテキストを付与でき、トラブルシューティング時に非常に役立ちます。
 
-1.  Open the **gameserver.go** file in your Editor.
+1.  エディターで **gameserver.go** ファイルを開きます。
 
-1.  Before the line that increments `gamesCompletedCounter`, insert the following lines:
+1.  `gamesCompletedCounter` をインクリメントする行の前に、以下の行を挿入します:
 
     ```go
     gameResultAttr := attribute.String("game.result", resultCode)
     span.SetAttributes(gameResultAttr)
     ```
 
-1.  Save the file, format your code with `go fmt`, and restart the program by re-running `run.sh`.
+1.  ファイルを保存し、`go fmt` でコードを整形し、`run.sh` を再実行してプログラムを再起動します。
 
-1.  Wait a few moments for test data to be generated. Then, go to **Grafana Cloud -> Explore** and select your **Traces** data source.
+1.  テストデータが生成されるまでしばらく待ちます。次に、**Grafana Cloud -> Explore** に移動し、**Traces** データソースを選択します。
 
-    Search for Traces:
+    トレースを検索します:
 
     - Service name: **gameserver** 
 
-    - Tags: **resource: service.namespace = (your namespace)**
+    - Tags: **resource: service.namespace = (選んだ名前空間)**
 
-    Then, click on the plus **+** button to add another tag filter:
+    次に、プラス **+** ボタンをクリックしてタグフィルターを追加します:
 
     - span: **game.result = COMPUTER**
 
-1.  Click on a Trace and then expand the span named **play**.
+1.  トレースをクリックし、**play** という名前のスパンを展開します。
 
-    Expand the **Span Attributes** section. Notice how `game.result` is now recorded as a Span Attribute and it displays COMPUTER. 
+    **Span Attributes** セクションを展開します。`game.result` がスパン属性として記録され、COMPUTER と表示されていることに注目してください。
 
-    Now we can instantly find traces relating to specific business scenarios in our application - in this case, finding traces where the computer won the game.
+    これで、アプリケーション内の特定のビジネスシナリオに関連するトレースをすぐに見つけることができます — この場合は、コンピューターがゲームに勝ったトレースです。
 
-1.  Q: What happens if you find all traces where `game.result` is neither PLAYER, nor COMPUTER? What results are returned?
+1.  質問: `game.result` が PLAYER でも COMPUTER でもないトレースをすべて検索するとどうなりますか？どんな結果が返されますか？
 
 
 <details>
-    <summary>See the completed code for _gameserver.go_</summary>
+    <summary>_gameserver.go_ の完成コードを見る</summary>
 
-    If you haven't managed to complete this exercise, but you'd like to "skip to the end", then you can replace your contents of **gameserver.go** with this source file, which includes the metrics and traces instrumentation code:
+    この演習を完了できなかった場合でも「最後の状態」を確認したい場合は、**gameserver.go** の内容を以下のソースファイルに置き換えてください。メトリクスとトレースの計装コードが含まれています:
 
 ```go
 // gameserver.go - completed source file
@@ -318,24 +318,24 @@ func getResult(playerRoll, computerRoll int) (string, string, error) {
 </details>
 
 
-## Wrapping up
+## まとめ
 
-In this mission, you've seen:
+このミッションでは、以下のことを確認しました:
 
-- How to add valuable context to your telemetry, using the OpenTelemetry SDK
+- OpenTelemetry SDK を使って、テレメトリーに有用なコンテキストを追加する方法
 
-- How OpenTelemetry custom span attributes are stored and searchable in Tempo and Grafana Cloud Traces.
+- OpenTelemetry のカスタムスパン属性が Tempo と Grafana Cloud Traces でどのように保存・検索できるか
 
-- How to search for an OpenTelemetry custom metric using Prometheus, Grafana Cloud Metrics and Metrics Drilldown.
+- Prometheus、Grafana Cloud Metrics、Metrics Drilldown を使った OpenTelemetry カスタムメトリクスの検索方法
 
-## You've finished! What next?
+## お疲れさまでした！次のステップは？
 
-Now that you've unlocked the power of OpenTelemetry auto instrumentation, imagine the possibilities for enriching your telemetry data with custom insights that matter most to your applications. 
+OpenTelemetry の自動計装の力を体験した今、カスタムインサイトでテレメトリーデータを充実させる可能性を想像してみてください。
 
-OpenTelemetry's rich toolkit and APIs are your gateway to crafting deeper, more meaningful observability - the kind that transforms raw data into actionable intelligence. 
+OpenTelemetry の豊富なツールキットと API は、生データを実用的なインテリジェンスに変える、より深く意味のあるオブザーバビリティを構築するための入り口です。
 
-What valuable stories could your telemetry data tell with just a few lines of custom instrumentation?
+カスタム計装をほんの数行加えるだけで、テレメトリーデータからどんな価値ある情報が引き出せるでしょうか？
 
 
 
-[1]: https://opentelemetry.io/docs/reference/specification/compatibility/prometheus_and_openmetrics/#resource-attributes-1
+[1]: https://opentelemetry.io/docs/reference/specification/compatibility/prometheus_and_openmetrics/\#resource-attributes-1

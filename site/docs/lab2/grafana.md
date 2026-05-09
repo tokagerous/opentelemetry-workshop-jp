@@ -2,11 +2,11 @@
 sidebar_position: 1
 ---
 
-# 2.1. Explore OpenTelemetry in Grafana Cloud
+# 2.1. Grafana Cloud で OpenTelemetry を探索する
 
-Now let's begin to explore your OpenTelemetry signals in Grafana Cloud.
+Grafana Cloud で OpenTelemetry シグナルを探索してみましょう。
 
-Remember from the last lab module, your architecture now looks like this:
+前のラボモジュールで、アーキテクチャは以下のようになりました:
 
 ```mermaid
 flowchart LR
@@ -36,245 +36,238 @@ flowchart LR
 
 ```
 
-Now that your application is sending OpenTelemetry signals to Grafana Cloud via Alloy, you can start to see the signals inside your Grafana instance.
+アプリケーションが Alloy 経由で OpenTelemetry シグナルを Grafana Cloud に送信するようになったので、Grafana インスタンスでシグナルを確認できます。
 
-## Step 1: Explore Application Observability
+## Step 1: Application Observability を探索する
 
-**Grafana Cloud Application Observability** is an out-of-the box solution to monitor applications and minimize MTTR (mean time to resolution). Application Observability natively supports both OpenTelemetry and Prometheus and allows you to bring together application telemetry with data from the frontend and infrastructure layers in Grafana Cloud.
+**Grafana Cloud Application Observability** は、アプリケーションの監視と MTTR（平均復旧時間）の短縮を実現するすぐに使えるソリューションです。OpenTelemetry と Prometheus の両方をネイティブにサポートし、フロントエンドやインフラ層のデータとアプリケーションテレメトリーを Grafana Cloud で統合できます。
 
-Application Observability gives you an opinionated view of the OpenTelemetry-instrumented applications in your environment.
+Application Observability は、OpenTelemetry で計装されたアプリケーションの既定のビューを提供します。
 
-1.  Go to your Grafana instance.
+1.  Grafana インスタンスにアクセスします。
 
-1.  In the side menu, click on **Application** to open _Application Observability_.
-
-    :::tip
-
-    If you prefer to use the keyboard, you can press Ctrl+K (or Cmd+K on a Mac) to open the search bar, and type "Application", then hit **Enter**.
-
-    :::
-
-    Application Observability opens with the service inventory. This view shows all of the services currently sending OpenTelemetry traces, or trace-based metrics, to Grafana Cloud.
-
-1.  In the **Environment** dropdown, clear any existing entries (using the **X** button) and choose **lab** from the list.
-
-    This will show the list of OpenTelemetry instrumented services which are reporting to be running in the `lab` environment.
-
-1.  Press **+ Filter** to add a filter. Choose **service.namespace** for the attribute name, and in the "value" dropdown, choose your namespace from the list.
+1.  サイドメニューの **Application** をクリックして _Application Observability_ を開きます。
 
     :::tip
 
-    If you don't see your namespace in the service inventory, wait a few minutes. Applications appear in the service inventory once span metric generation has begun.
+    キーボードを使いたい場合は、Ctrl+K（Mac では Cmd+K）で検索バーを開き、「Application」と入力して **Enter** を押します。
 
     :::
 
-    :::opentelemetry-tip[A quick word on semantic conventions]
+    Application Observability はサービスインベントリで開きます。このビューには、OpenTelemetry トレースまたはトレースベースのメトリクスを Grafana Cloud に送信しているすべてのサービスが表示されます。
 
-    OpenTelemetry is at its most powerful when you follow its conventions.
+1.  **Environment** ドロップダウンで、既存のエントリを（**X** ボタンで）クリアし、リストから **lab** を選択します。
+
+    これにより、`lab` 環境で実行されていると報告している OpenTelemetry 計装済みサービスの一覧が表示されます。
+
+1.  **+ Filter** を押してフィルターを追加します。属性名に **service.namespace** を選択し、「value」ドロップダウンから自分の名前空間を選びます。
+
+    :::tip
+
+    サービスインベントリに自分の名前空間が表示されない場合は、数分待ってください。スパンメトリクスの生成が始まると、アプリケーションがサービスインベントリに表示されます。
+
+    :::
+
+    :::opentelemetry-tip[セマンティック規約について]
+
+    OpenTelemetry は、その規約に従うことで最大限の力を発揮します。
     
-    We're using the power of OpenTelemetry's _semantic conventions_ here, which is a list of well-known and standardized attributes that can be applied to your telemetry signals. Attributes allow us to slice and dice our telemetry, so that we can view metrics, logs and traces from only the specific service instances that we're interested in.
+    ここでは OpenTelemetry の _セマンティック規約（semantic conventions）_ を活用しています。これは、テレメトリーシグナルに適用できる、よく知られた標準化された属性のリストです。属性を使うことで、関心のある特定のサービスインスタンスのメトリクス、ログ、トレースだけを絞り込んで表示できます。
 
-    The attribute `service.namespace` is part of OpenTelemetry's semantic conventions. We can use it to store a namespace or grouping for our service. So it makes a pretty good choice for a filter here, to identify your applications from those of your fellow lab attendees.
+    `service.namespace` 属性は OpenTelemetry のセマンティック規約の一部です。サービスの名前空間やグループを格納するために使用できるため、ここでのフィルターとして、他の受講者のアプリケーションと区別するのに最適です。
 
-    We've also used the attribute `deployment.environment`, which is used by Grafana Cloud Application Observability to populate its _Environment_ drop-down list.
+    また、`deployment.environment` 属性も使用しています。これは Grafana Cloud Application Observability の _Environment_ ドロップダウンリストに反映されます。
 
-    You'll become more familiar with OpenTelemetry resource attributes as you use them.
+    OpenTelemetry のリソース属性は、使い慣れるほど便利さが実感できます。
 
     :::
 
-1.  Now the service inventory will show just your **rolldice** service. Notice how we can instantly see high-level metrics about the service:
+1.  サービスインベントリに **rolldice** サービスだけが表示されるようになります。サービスの概要メトリクスがすぐに確認できます:
 
-    - Duration (P95)
+    - Duration（P95）
     - Error Rate
     - Request Rate
 
-    Notice how Application Observability also shows the Java coffee-cup logo. This is because the OpenTelemetry instrumentation stores the runtime information in the attribute `telemetry.sdk.language`.
+    Application Observability には Java のコーヒーカップロゴも表示されます。これは、OpenTelemetry の計装が `telemetry.sdk.language` 属性にランタイム情報を保存しているためです。
 
-1.  Click on the `rolldice` service to open the Service View.
+1.  `rolldice` サービスをクリックして Service View を開きます。
 
-    Notice how the Service View title is `<namespace name>/<service name>` to show you exactly which namespace we're looking at.
+    Service View のタイトルが `<名前空間>/<サービス名>` となっており、どの名前空間を見ているかが分かります。
 
-    Application Observability instantly shows us the top line stats that we would typically want to know about our service:
+    Application Observability は、サービスについて通常知りたい重要な統計情報を即座に表示します:
 
-    ![Grafana Alloy shipping OTLP directly to Grafana Cloud](/img/appo11y_rolldice.png)
+    ![Grafana Alloy が OTLP を直接 Grafana Cloud に送信](/img/appo11y_rolldice.png)
 
-    In this view you can see the most important health metrics from your application.
+    このビューでは、アプリケーションの最も重要なヘルスメトリクスを確認できます。
 
-    - Duration of requests - mean, 95th and 99th percentiles.
+    - リクエストの所要時間 — 平均、95 パーセンタイル、99 パーセンタイル
 
-    - Error rate
+    - エラーレート
 
-    - Request rate
+    - リクエストレート
 
-    :::info[Using Application Observability with metrics from other sources]
+    :::info[他のソースからのメトリクスとの併用]
 
-    For most of the visualizations in the application, Application Observability shows metrics generated from traces (so-called _span metrics_). By default, Application Observability generates these metrics for you.
+    Application Observability のほとんどのビジュアライゼーションでは、トレースから生成されたメトリクス（いわゆる _スパンメトリクス_）が表示されます。デフォルトでは、Application Observability がこれらのメトリクスを自動生成します。
     
-    If you prefer, you can use OpenTelemetry's [Span Metrics Connector](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/connector/spanmetricsconnector) instead, to generate the metrics locally, and send them to Grafana Cloud.
+    代わりに、OpenTelemetry の [Span Metrics Connector](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/connector/spanmetricsconnector) を使ってローカルでメトリクスを生成し、Grafana Cloud に送信することもできます。
     
-    For more information, [see the Application Observability docs](https://grafana.com/docs/grafana-cloud/monitor-applications/application-observability/manual/configure).
+    詳細は [Application Observability のドキュメント](https://grafana.com/docs/grafana-cloud/monitor-applications/application-observability/manual/configure)を参照してください。
     :::
 
-1.  Scroll down the page, and you will find the list of operations that are being invoked on this service, along with their typical (P95) duration, error and request rates:
+1.  ページを下にスクロールすると、サービスで呼び出されている操作のリストと、各操作の典型的な（P95）所要時間、エラーレート、リクエストレートが表示されます:
 
-    ![Operations in Application Observability](/img/appo11y_operations.png)
+    ![Application Observability の操作一覧](/img/appo11y_operations.png)
 
 
-## Step 2: Explore Traces, Logs and Metrics
+## Step 2: トレース、ログ、メトリクスを探索する
 
-Traces are one of the building blocks of OpenTelemetry. Traces allow us to observe our system from the inside out.
+トレースは OpenTelemetry の基本的な構成要素の一つです。トレースにより、システムの内部動作を観察できます。
 
-OpenTelemetry's instrumentation libraries generate traces from our application, which we can explore in Application Observability.
+OpenTelemetry の計装ライブラリがアプリケーションからトレースを生成し、Application Observability で確認できます。
 
-### Traces
+### トレース
 
-1.  From the _rolldice_ service overview, click on the **Traces** tab.
+1.  _rolldice_ のサービス概要から、**Traces** タブをクリックします。
 
-1.  In the traces list, click on a **Trace ID** to open the trace view, side-by-side.
+1.  トレースリストで **Trace ID** をクリックして、トレースビューをサイドバイサイドで開きます。
 
     :::tip
 
-    To make more room for the trace tail, you can resize the view by clicking on the vertical separator bar in the middle and dragging it to the left.
+    トレースの詳細を見やすくするには、画面中央の縦セパレーターバーをクリックして左にドラッグし、ビューのサイズを調整できます。
 
     :::
 
-1.  In the trace view on the right hand side of the screen, under the heading "Service & Operation", click on the **rolldice** span, then expand:
+1.  画面右側のトレースビューで、「Service & Operation」の見出しの下にある **rolldice** スパンをクリックし、以下を展開します:
 
     - Span Attributes
     
     - Resource Attributes
 
-    Here we can see the rich set of attributes which have been automatically captured by the OpenTelemetry agent.
+    OpenTelemetry エージェントが自動的にキャプチャした、豊富な属性セットを確認できます。
 
-    ![Viewing OpenTelemetry trace span attributes in Application Observability](/img/appo11y_spanattributes.png)
+    ![Application Observability でのトレーススパン属性の表示](/img/appo11y_spanattributes.png)
 
-    :::opentelemetry-tip[Understanding _span_ and _resource_ attributes]
+    :::opentelemetry-tip[_スパン属性_ と _リソース属性_ の違い]
 
-    Attributes are pieces of metadata that are attached to signals:
+    属性は、シグナルに付加されるメタデータです:
 
-    - **Span Attributes** apply to Trace Spans, and contain metadata relating to this part of the trace. In this example, we only have one span, which captures the HTTP interaction of our app. We can see attributes like `http.route` and `url.query` which help observe the detail of this specific request.
+    - **スパン属性** はトレーススパンに適用され、トレースのその部分に関するメタデータを含みます。この例では、アプリの HTTP インタラクションをキャプチャする 1 つのスパンがあります。`http.route` や `url.query` のような属性で、リクエストの詳細を観察できます。
 
-    - **Resource Attributes** contain metadata about our service, and the environment where it is running. We can discover attributes like `telemetry.sdk.language` (Java), `host.name`, and so on.
+    - **リソース属性** はサービスとその実行環境に関するメタデータを含みます。`telemetry.sdk.language`（Java）、`host.name` などの属性を確認できます。
 
     :::
 
-1.  Attributes are a powerful part of OpenTelemetry and make it easier to answer questions about our services.
+1.  属性は OpenTelemetry の強力な機能で、サービスに関する疑問に答えやすくなります。
 
-    By looking at the _span attributes_, can you answer the following questions?
+    _スパン属性_ を見て、以下の質問に答えられますか？
 
-    - The _rolldice_ service accepts a player name in the URL's query string. A query string is the part of a URL after the question-mark, like this: `/myservice?param=value`.
+    - _rolldice_ サービスは URL のクエリ文字列でプレイヤー名を受け取ります。クエリ文字列は URL の疑問符以降の部分です（例: `/myservice?param=value`）。
     
-        From the span attributes, can you find the player name?
+        スパン属性からプレイヤー名を見つけられますか？
 
         <details>
-        <summary>See the answer</summary>
+        <summary>回答を見る</summary>
 
-        Look at the **span attribute** `url.query`. It should show a value like `player=John`.
+        **スパン属性** `url.query` を確認してください。`player=John` のような値が表示されます。
         </details>
 
-    - What is the architecture of the node where the service is running?
+    - サービスが実行されているノードのアーキテクチャは何ですか？
     
       <details>
-        <summary>See the answer</summary>
+        <summary>回答を見る</summary>
   
-        Look at the **resource attribute** `host.arch`.
+        **リソース属性** `host.arch` を確認してください。
         
-        It should show `amd64`, which shows that this service is running on a 64-bit, x86 host.
+        `amd64` と表示され、このサービスが 64 ビットの x86 ホストで実行されていることが分かります。
       </details>
 
-    - Which browser (User-Agent) made the request to the service?
+    - サービスにリクエストを送ったブラウザ（User-Agent）は何ですか？
 
       <details>
-        <summary>See the answer</summary>
+        <summary>回答を見る</summary>
   
-        Look at the **span attribute** `user_agent.original`. 
+        **スパン属性** `user_agent.original` を確認してください。
         
-        It should contain something like `k6/0.53.0 (https://k6.io/)`, which is because _k6_ is generating test   requests to our service!
+        `k6/0.53.0 (https://k6.io/)` のような内容が含まれているはずです。これは _k6_ がサービスにテストリクエストを生成しているためです！
       </details>
 
-### Logs
+### ログ
 
-1.  Click on the **Logs** tab. 
+1.  **Logs** タブをクリックします。
 
-1.  On the right-hand side, ensure the **New Format** button is selected.
+1.  右側で **New Format** ボタンが選択されていることを確認します。
 
-    ![Viewing OpenTelemetry logs in Application Observability](/img/appo11y_logs.png)
+    ![Application Observability での OpenTelemetry ログの表示](/img/appo11y_logs.png)
 
-    Application Observability writes and executes a Loki LogQL query, to find logs for this service, narrowed down to our namespace.
+    Application Observability は Loki の LogQL クエリを作成・実行し、名前空間で絞り込んだサービスのログを表示します。
     
-    Application Observability also automatically parses and formats additional context which was sent by the OpenTelemetry instrumentation, such as the **scope name** (which, in Java, holds the name of the class), the log level and the trace ID.
+    また、OpenTelemetry の計装から送信された追加のコンテキスト（**スコープ名**（Java ではクラス名）、ログレベル、トレース ID など）を自動的にパースしてフォーマットします。
 
     <details>
-      <summary>How does Grafana Cloud process your OpenTelemetry logs?</summary>
+      <summary>Grafana Cloud での OpenTelemetry ログの処理方法</summary>
 
-      Grafana Cloud performs some mapping on your OpenTelemetry logs:
+      Grafana Cloud は OpenTelemetry ログに対して以下のマッピングを行います:
   
-      - It determines a `service_name`, and uses it as a _Loki label_.
-      - It stores some other OpenTelemetry attributes as labels, like:
-          - deployment.environment (becomes `deployment_environment`)
-          - service.instance.id (becomes `service_instance_id`)
-      - It stores additional OpenTelemetry attributes as _Structured Metadata_, which are key-value pairs that are attached to log lines.
+      - `service_name` を決定し、_Loki ラベル_ として使用します。
+      - 他の OpenTelemetry 属性もラベルとして保存します:
+          - deployment.environment（`deployment_environment` になります）
+          - service.instance.id（`service_instance_id` になります）
+      - 追加の OpenTelemetry 属性は _Structured Metadata_ として保存されます。これはログ行に付加されるキーバリューペアです。
   
-      For more information, see [the Loki documentation](https://grafana.com/docs/loki/latest/send-data/otel/).
+      詳細は [Loki のドキュメント](https://grafana.com/docs/loki/latest/send-data/otel/)を参照してください。
     </details>
 
-1.  Expand an individual log line by clicking on it. 
+1.  個々のログ行をクリックして展開します。
 
-    Grafana Cloud captures the rich value of OpenTelemetry _resource attributes_ such as `host.name`, and `deployment.environment`, by attaching them to each log line, replacing periods with underscores.
+    Grafana Cloud は、`host.name` や `deployment.environment` などの OpenTelemetry _リソース属性_ の豊富な情報を、ピリオドをアンダースコアに置換して各ログ行に付加します。
     
-    This provides invaluable context when troubleshooting a problem:
+    これは問題のトラブルシューティング時に非常に役立つコンテキストを提供します:
 
-    ![OpenTelemetry attributes in logs in Application Observability](/img/appo11y_logfields.png)
+    ![Application Observability でのログフィールドの OpenTelemetry 属性](/img/appo11y_logfields.png)
 
-1.  We can also correlate from logs immediately to traces.
+1.  ログからトレースへの直接相関もできます。
 
-    Scroll down a little further, then, next to _traceID_, click on the **View trace** button.
+    少し下にスクロールし、_traceID_ の横にある **View trace** ボタンをクリックします。
 
-    ![Correlate from a log to a trace](/img/appo11y_traceid.png)
+    ![ログからトレースへの相関](/img/appo11y_traceid.png)
 
-    Then, you will be taken to the Traces tab to view that specific trace, where you can view more information about this request.
+    Traces タブに移動して特定のトレースが表示され、このリクエストの詳細情報を確認できます。
 
-### Runtime metrics and information
+### ランタイムメトリクスと情報
 
-In addition to traces and logs, OpenTelemetry auto-instrumentation also captures some helpful runtime metrics for our applications, right out of the box.
+トレースとログに加えて、OpenTelemetry の自動計装は、アプリケーションのランタイムメトリクスもすぐに使えるかたちでキャプチャします。
 
-These metrics can be really helpful for monitoring trends, or identifying issues which may not immediately be obvious from traces or logs.
+これらのメトリクスは、トレンドの監視や、トレースやログだけでは気づきにくい問題の特定に非常に役立ちます。
 
-1.  From Application Observability for the _rolldice_ service, click on the **JVM** tab.
+1.  Application Observability の _rolldice_ サービスから、**JVM** タブをクリックします。
 
-    This tab in Application Observability changes dynamically, depending on the language of the instrumented service. In this case, it shows some metrics which are typical for a Java application:
+    このタブは、計装されたサービスの言語に応じて動的に変わります。ここでは、Java アプリケーションに典型的なメトリクスが表示されます:
 
-    - CPU Utilization
+    - CPU 使用率
 
-    - Heap memory utilization
+    - ヒープメモリ使用率
 
-    and more.
+    など。
 
-    ![View JVM metrics in Application Observability](/img/appo11y_jvm.png)
+    ![Application Observability での JVM メトリクスの表示](/img/appo11y_jvm.png)
 
-1.  Finally, at the top right of the screen, click on the **Runtime** dropdown near the service name.
+1.  最後に、画面右上のサービス名の横にある **Runtime** ドロップダウンをクリックします。
 
-    You'll see information about the runtime (Java) which has been captured by OpenTelemetry: namely the language.
-
-
-
-## Wrapping up
-
-In this lab, you've learned how to do the following:
-
-- Explore OpenTelemetry-instrumented Services in Application Observability
-
-- Use resource attributes to narrow down and view signals for a specific service
-
-- View and correlate between traces and logs 
-
-- View runtime metrics from an application
-
-Click on the next module to continue.
+    OpenTelemetry がキャプチャしたランタイム（Java）の情報（言語など）を確認できます。
 
 
 
+## まとめ
 
+このラボでは、以下のことを学びました:
 
+- Application Observability で OpenTelemetry 計装済みサービスを探索する
 
+- リソース属性を使って特定のサービスのシグナルを絞り込み表示する
 
+- トレースとログ間の相関と表示
+
+- アプリケーションのランタイムメトリクスの確認
+
+次のモジュールに進むには「次へ」をクリックしてください。

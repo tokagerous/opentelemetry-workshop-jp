@@ -2,17 +2,17 @@
 sidebar_position: 1
 ---
 
-# 4.1. Introduction
+# 4.1. はじめに
 
-For this fourth lab, we're letting you choose your own mission.
+4 つ目のラボでは、取り組むミッションを自分で選べます。
 
-You can either:
+次のどちらかを選んで進めてください:
 
-- Dive into a fully configured reference environment, or
+- すでに構成済みのリファレンス環境を詳しく調べる
 
-- Add custom telemetry to _gameserver_
+- _gameserver_ にカスタムテレメトリーを追加する
 
-If you're not sure which you'd like to do, have a read of both of the docs and then decide!
+どちらにするか迷う場合は、両方のドキュメントに目を通してから決めてください。
 
-Click to the next module to read about the reference environment mission.
+次のモジュールに進むと、リファレンス環境ミッションの内容を確認できます。
 

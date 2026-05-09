@@ -1,3 +1,3 @@
-# OpenTelemetry Workshop
+# OpenTelemetry ワークショップ
 
-This repository contains the source code and exercises for the Grafana Labs Introduction to OpenTelemetry workshop.
+このリポジトリには、Grafana Labs の OpenTelemetry 入門ワークショップのソースコードと演習が含まれています。

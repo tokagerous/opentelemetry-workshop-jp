@@ -77,7 +77,7 @@ const Quiz = ({ questions }) => {
             index > 0 && !showResults[index - 1] ? styles.disabled : ""
           }`}
         >
-          <h3>Question {index + 1}</h3>
+          <h3>問題 {index + 1}</h3>
           <p>{question.question_text}</p>
           <div className={styles.options}>
             {question.choices.map((choice, choiceIndex) => (
@@ -107,7 +107,7 @@ const Quiz = ({ questions }) => {
               }
               className={styles.button}
             >
-              Submit
+              回答する
             </button>
           ) : (
             <div
@@ -124,15 +124,15 @@ const Quiz = ({ questions }) => {
       ))}
       {quizCompleted && (
         <div className={styles.results}>
-          <h2>Quiz Completed!</h2>
+          <h2>クイズ完了！</h2>
           <p>
-            Your final score: {score} out of {questions.length}
+            最終スコア: {questions.length} 問中 {score} 問正解
           </p>
           {score === questions.length && (
-            <p className={styles.perfect}>Perfect score! Well done!</p>
+            <p className={styles.perfect}>全問正解！お見事です！</p>
           )}
           <button onClick={resetQuiz} className={styles.button}>
-            Restart Quiz
+            もう一度挑戦
           </button>
         </div>
       )}

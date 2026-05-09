@@ -8,8 +8,8 @@ import {themes as prismThemes} from 'prism-react-renderer';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Introduction to OpenTelemetry Workshop',
-  tagline: 'Observability is cool',
+  title: 'OpenTelemetry 入門ワークショップ',
+  tagline: 'オブザーバビリティを始めよう',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
@@ -30,8 +30,8 @@ const config = {
   // useful metadata like html lang. For example, if your site is Chinese, you
   // may want to replace "en" with "zh-Hans".
   i18n: {
-    defaultLocale: 'en',
-    locales: ['en'],
+    defaultLocale: 'ja',
+    locales: ['ja'],
   },
 
   markdown: {
@@ -97,7 +97,7 @@ const config = {
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
       navbar: {
-        title: 'Introduction to OpenTelemetry Workshop - Grafana Labs',
+        title: 'OpenTelemetry 入門ワークショップ - Grafana Labs',
         logo: {
           alt: 'My Site Logo',
           src: 'img/grafana.svg',
@@ -114,7 +114,7 @@ const config = {
         style: 'dark',
         links: [
           {
-            title: 'Community',
+            title: 'コミュニティ',
             items: [
               {
                 label: 'Stack Overflow',
@@ -131,7 +131,7 @@ const config = {
             ],
           },
           {
-            title: 'More',
+            title: 'その他',
             items: [
               {
                 label: 'GitHub',
@@ -140,7 +140,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} Grafana Labs. Built with Docusaurus and dinosaurs.`,
+        copyright: `Copyright © ${new Date().getFullYear()} Grafana Labs. Docusaurus と恐竜で構築。`,
       },
       prism: {
         theme: prismThemes.github,

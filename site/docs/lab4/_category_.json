@@ -1,8 +1,8 @@
 {
-  "label": "Lab 4 - Extra Missions",
+  "label": "Lab 4 - エクストラミッション",
   "position": 1,
   "link": {
     "type": "generated-index",
-    "description": "Optional extra missions around OpenTelemetry in Grafana Cloud."
+    "description": "Grafana Cloud での OpenTelemetry に関する追加ミッション（任意）。"
   }
 }

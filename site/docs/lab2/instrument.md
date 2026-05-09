@@ -2,11 +2,11 @@
 sidebar_position: 2
 ---
 
-# 2.2. Add a second service 
+# 2.2. 2つ目のサービスを追加する
 
-In this lab, you'll add a second service to the architecture, with OpenTelemetry instrumentation.
+このラボでは、OpenTelemetry 計装を備えた 2 つ目のサービスをアーキテクチャに追加します。
 
-After you complete this module, your environment will look like this:
+このモジュールが完了すると、環境は以下のようになります:
 
 ```mermaid
 flowchart LR
@@ -30,23 +30,23 @@ flowchart LR
 ```
 
 
-## Step 1: Run a Go program with OpenTelemetry instrumentation
+## Step 1: OpenTelemetry 計装済みの Go プログラムを実行する
 
-Some languages require you to add OpenTelemetry libraries or code into your application. Go is one example of a language that uses this approach.
+言語によっては、OpenTelemetry のライブラリやコードをアプリケーションに追加する必要があります。Go はこのアプローチを使う言語の一つです。
 
-In this part of the workshop, we will run a Go program which is instrumented with OpenTelemetry libraries. To save time, we've already added the instrumentation code for you.
+このパートでは、OpenTelemetry ライブラリで計装済みの Go プログラムを実行します。時間を節約するため、計装コードはあらかじめ追加してあります。
 
-This service is called _gameserver_. It runs a simple game, where a user competes with the Computer to get the highest score. The _gameserver_ service calls the _rolldice_ service (from Lab 1) to obtain two random rolls of the dice. The winner of each game is the player with the highest score.
+このサービスは _gameserver_ と呼ばれます。ユーザーとコンピューターがダイスの出目で勝負する簡単なゲームを実行します。_gameserver_ サービスは _rolldice_ サービス（Lab 1 で使用）を呼び出してサイコロを 2 回振り、出目の大きい方が勝ちです。
 
-(Keen observers may spot there's something missing in these requirements. You'll find out what it is, shortly!)
+（注意深い方は、この仕様に何か足りないものがあることに気づくかもしれません。それが何かは、すぐに分かります！）
 
-Let's run the _gameserver_:
+_gameserver_ を実行しましょう:
 
-1.  Open your virtual development environment.
+1.  オンライン開発環境を開きます。
 
-1.  Firstly, stop the _rolldice_ k6 test if it is still running: find the terminal running the k6 script, and press **Ctrl+C** to abort the test, then **close the terminal**.
+1.  まず、_rolldice_ の k6 テストがまだ実行中の場合は停止します: k6 スクリプトが実行されているターミナルを見つけ、**Ctrl+C** でテストを中止し、**ターミナルを閉じます**。
 
-1.  Open a new terminal (**Terminal -> New Terminal**), and type the following to copy the second project into your persistent workspace, then enter the new directory:
+1.  新しいターミナルを開き（**Terminal -> New Terminal**）、以下を入力して 2 つ目のプロジェクトを永続ワークスペースにコピーし、ディレクトリに移動します:
 
     ```
     cp -r /opt/gameserver /home/project/persisted/
@@ -54,28 +54,28 @@ Let's run the _gameserver_:
     cd /home/project/persisted/gameserver
     ```
 
-1.  In the project Explorer tree, find the file `persisted/gameserver/otel.go` and open it, to inspect the code.
+1.  プロジェクトの Explorer ツリーで `persisted/gameserver/otel.go` を見つけて開き、コードを確認します。
 
     :::tip
 
-    If you plan to instrument your own Go application, you can follow [a step-by-step guide in the Grafana Cloud documentation][1].
+    自身の Go アプリケーションを計装する場合は、[Grafana Cloud ドキュメントのステップバイステップガイド][1]を参照してください。
 
     :::
 
-    Inside `otel.go` is some _boilerplate code_ to initialize the OpenTelemetry SDK and add auto-instrumentation of packages. It sets up traces, logs and metrics exporters.
+    `otel.go` には、OpenTelemetry SDK の初期化とパッケージの自動計装を追加する _ボイラープレートコード_ が含まれています。トレース、ログ、メトリクスのエクスポーターを設定しています。
 
-    Like the other OpenTelemetry language SDKs, it can be configured with environment variables, which we will do next.
+    他の OpenTelemetry 言語 SDK と同様に、環境変数で設定でき、次のステップで設定します。
 
-1.  Let's set our OpenTelemetry _resource attributes_ for this application.
+1.  このアプリケーションの OpenTelemetry _リソース属性_ を設定しましょう。
 
-    Open the run script, `persisted/gameserver/run.sh`. **Just before** the final line (`go run .`), insert these lines, replacing `<your chosen namespace>` with the same namespace you chose in the previous lab:
+    実行スクリプト `persisted/gameserver/run.sh` を開きます。最終行（`go run .`）の**直前に**、以下の行を挿入します。`<your chosen namespace>` は前のラボで選んだ名前空間と同じものに置き換えてください:
 
     ```shell
     export NAMESPACE="<your chosen namespace>" 
     export OTEL_RESOURCE_ATTRIBUTES="service.name=gameserver,deployment.environment=lab,service.namespace=${NAMESPACE},service.version=1.0-demo,service.instance.id=${HOSTNAME}:8090"
     ```
 
-1.  In an unused terminal, change to the `persisted/gameserver` directory and run _gameserver_. It might take a minute or two to start, as your code will need to be compiled:
+1.  空いているターミナルで `persisted/gameserver` ディレクトリに移動し、_gameserver_ を実行します。コードのコンパイルが必要なため、起動に 1〜2 分かかることがあります:
 
     ```
     cd /home/project/persisted/gameserver
@@ -83,22 +83,22 @@ Let's run the _gameserver_:
     ./run.sh
     ```
 
-    :::warning[Rolldice should still be running]
+    :::warning[Rolldice が実行中であることを確認]
 
-    Make sure the _rolldice_ application is still running before running the next command, because the _gameserver_ app depends on it. If the _rolldice_ service has stopped, refer back to the previous Lab to see how to run it.
+    次のコマンドを実行する前に、_rolldice_ アプリケーションがまだ実行中であることを確認してください。_gameserver_ アプリは _rolldice_ に依存しています。_rolldice_ サービスが停止している場合は、前のラボを参照して再実行してください。
 
     :::
 
 
-1.  Finally, let's generate some load to the service.
+1.  最後に、サービスに負荷をかけましょう。
 
     :::tip
 
-    Ensure you have stopped the _rolldice_ k6 load test from Lab 1 before continuing. To stop the load test, find the terminal where k6 is running, and press **Ctrl+C**.
+    続行する前に、Lab 1 の _rolldice_ k6 負荷テストを停止してください。k6 が実行中のターミナルを見つけて、**Ctrl+C** を押します。
 
     :::
 
-    In a new terminal, run the following commands:
+    新しいターミナルで、以下のコマンドを実行します:
 
     ```
     cd /home/project/persisted/gameserver
@@ -106,70 +106,70 @@ Let's run the _gameserver_:
     k6 run loadtest.js
     ```
 
-    You should see some requests arriving into _rolldice_. k6 is sending test requests to _gameserver_, which is calling _rolldice_ to get random numbers.
+    _rolldice_ にリクエストが到着するのが確認できます。k6 が _gameserver_ にテストリクエストを送り、_gameserver_ が _rolldice_ を呼び出してランダムな数値を取得しています。
 
-By the end of this step, you should be running the complete system:
+このステップの完了時点で、以下のシステム全体が稼働しているはずです:
 
-- An OpenTelemetry collector (Grafana Alloy) 
+- OpenTelemetry コレクター（Grafana Alloy）
 
-- The _rolldice_ application (Java)
+- _rolldice_ アプリケーション（Java）
 
-- The _gameserver_ application (Go)
+- _gameserver_ アプリケーション（Go）
 
-- The _gameserver_ load test script (k6)
+- _gameserver_ 負荷テストスクリプト（k6）
 
-## Step 2: Explore the Service Map and Overview
+## Step 2: サービスマップと概要を確認する
 
-Now that we've instrumented a second service, we will be able to visualize the interaction between these services in a Service Map.
+2 つ目のサービスを計装したので、これらのサービス間のやり取りをサービスマップで視覚化できます。
 
-1.  In Grafana, navigate to Application Observability (from the side menu, click **Application**).
+1.  Grafana で Application Observability に移動します（サイドメニューから **Application** をクリック）。
 
-1.  Using the filters, narrow down the service inventory to:
+1.  フィルターを使って、サービスインベントリを以下に絞り込みます:
 
     - environment = lab
 
-    - service.namespace = (your chosen namespace)
+    - service.namespace = （選んだ名前空間）
 
-1.  Click on the **Service Map** tab.
+1.  **Service Map** タブをクリックします。
 
-    You'll now see a visualization of all services that match the given filters, and their metrics. This Service Map is generated from span metrics. 
+    指定したフィルターに一致するすべてのサービスとそのメトリクスが視覚化されます。このサービスマップはスパンメトリクスから生成されます。
 
     :::tip
 
-    If you can't see both services in the service inventory list, wait a few moments for span metrics to be generated. Then, click the Refresh button.
+    サービスインベントリのリストに両方のサービスが表示されない場合は、スパンメトリクスが生成されるまでしばらく待ってから、更新ボタンをクリックしてください。
 
     :::
     
-    In the map, notice how you can see the flow of interaction between _gameserver_ and _rolldice_. You can also see the number of requests per second to the service:
+    マップでは、_gameserver_ と _rolldice_ 間のやり取りの流れが確認できます。サービスへの 1 秒あたりのリクエスト数も表示されます:
 
-    ![Service Map in Application Observability](/img/appo11y_servicemap.png)
+    ![Application Observability のサービスマップ](/img/appo11y_servicemap.png)
 
-1.  Click on the **gameserver** circle in the map, then click on **Service Overview**.
+1.  マップ内の **gameserver** の円をクリックし、**Service Overview** をクリックします。
 
-    Now we can see the health of this service. In the _Downstream_ panel, notice how Grafana has identified the downstream service (_rolldice_ from Lab 1).
+    このサービスのヘルス状態を確認できます。_Downstream_ パネルでは、下流のサービス（Lab 1 の _rolldice_）が自動的に識別されています。
 
-    ![gameserver Service Overview in Application Observability](/img/appo11y_gameserveroverview.png)
+    ![Application Observability の gameserver サービス概要](/img/appo11y_gameserveroverview.png)
 
-You'll notice that our service seems to be throwing some errors. We'll look at those next.
+サービスにいくつかエラーが発生しているようです。次のステップで詳しく見てみましょう。
 
 
-## Step 3: Diagnose an error
+## Step 3: エラーを診断する
 
-Let's zoom in on these errors that our service seems to be experiencing.
+サービスで発生しているエラーを詳しく調べましょう。
 
 :::opentelemetry-tip
 
-OpenTelemetry auto-instrumentation can mark traces with a status of **error** when it detects that an error is being returned by the service. That makes it a lot easier to identify failed requests to our services. In Grafana Cloud, we can easily correlate to find out the root cause.
+OpenTelemetry の自動計装は、サービスがエラーを返していることを検出すると、トレースに **error** ステータスを付けることができます。これにより、サービスへの失敗したリクエストを簡単に特定できます。Grafana Cloud では、根本原因を見つけるための相関分析も簡単に行えます。
 
 :::
 
-1.  From the Service Overview screen for _gameserver_, find the **Errors** graph, and click on the **Traces** button to show errored traces.
+1.  _gameserver_ の Service Overview 画面から、**Errors** グラフを見つけ、**Traces** ボタンをクリックしてエラーのあるトレースを表示します。
 
-    Application Observability navigates to the _Traces_ tab and lists traces which were marked with a `status` of `error`, in the selected time frame.
+    Application Observability が _Traces_ タブに移動し、選択した時間枠で `status` が `error` のトレースが一覧表示されます。
 
-    ![Error traces in Application Observability](/img/appo11y_errortraces.png)
+    ![Application Observability のエラートレース](/img/appo11y_errortraces.png)
 
-    Notice how the Traces tab has generated the following TraceQL query, to find all errored traces:
+    Traces タブでは、すべてのエラートレースを検索するために以下の TraceQL クエリが生成されています:
 
     ```
     {resource.service.name="gameserver" 
@@ -180,62 +180,62 @@ OpenTelemetry auto-instrumentation can mark traces with a status of **error** wh
 
     :::opentelemetry-tip
 
-    Did you notice the OpenTelemetry attributes within this TraceQL query? In this query, we're referencing _resource attributes_, by adding the `resource.` prefix to the attribute names.
+    この TraceQL クエリ内の OpenTelemetry 属性に気づきましたか？このクエリでは、属性名に `resource.` プレフィックスを付けて _リソース属性_ を参照しています。
     
-    For example: `resource.service.namespace`, and `resource.service.name`.
+    例: `resource.service.namespace`、`resource.service.name`
     
     :::
 
-1.  Find a trace and **click on the trace ID** to open the Trace view. Now we're beginning to see some interesting traces!
+1.  トレースを見つけて **Trace ID** をクリックし、トレースビューを開きます。興味深いトレースが見えてきます！
 
-    The _gameserver_ application makes two calls to _rolldice_ to fetch a random number, so it can calculate a result for the game.
+    _gameserver_ アプリケーションは、ゲームの結果を計算するために _rolldice_ を 2 回呼び出してランダムな数値を取得します。
 
-    The trace visualizes the two calls to the _rolldice_ service in a different color:
+    トレースでは、_rolldice_ サービスへの 2 回の呼び出しが異なる色で表示されます:
 
-    ![A trace with two calls](/img/appo11y_gameservertrace.png)
+    ![2 回の呼び出しを含むトレース](/img/appo11y_gameservertrace.png)
 
-1.  We viewed this trace because it had an error. Let's find out the root cause.
+1.  エラーがあったためこのトレースを表示しました。根本原因を突き止めましょう。
 
-    Click on one of the errored span names to expand the trace. Can you find out why the service errored?
+    エラーのあるスパン名をクリックしてトレースを展開します。サービスがエラーを返した理由が分かりますか？
 
-    You can also click **Logs for this span** to view logs, if you want to see the relevant logs around this span.
+    **Logs for this span** をクリックして、このスパン前後のログを確認することもできます。
 
-    **Question: Why do you think this service is throwing an error?** You can check your hypothesis in the quiz at the end of this lab.
+    **問題: このサービスがエラーを返している理由は何だと思いますか？** このラボの最後のクイズで仮説を確認できます。
 
-1.  Once you've diagnosed the error, can you use the trace information to find out the answer to this question:
+1.  エラーの原因を特定したら、トレース情報を使って以下の質問に答えてみてください:
 
-    - Which OpenTelemetry instrumentation libraries (name and version) were used to create these traces?
+    - これらのトレースを作成するために使用された OpenTelemetry 計装ライブラリ（名前とバージョン）は何ですか？
 
         <details>
-        <summary>See how to find the answer</summary>
+        <summary>回答の見つけ方を見る</summary>
 
-        Look at the **text in the header of each span**. It should have a _Library Name_ and _Library Version_ field. e.g.:
+        **各スパンのヘッダーテキスト** を確認してください。_Library Name_ と _Library Version_ フィールドがあるはずです。例:
 
-        - go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp (for Go's HTTP capabilities)
-        - io.opentelemetry.tomcat-10.0 (for Java's Tomcat webserver)
+        - go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp（Go の HTTP 機能用）
+        - io.opentelemetry.tomcat-10.0（Java の Tomcat ウェブサーバー用）
         </details>
 
 :::opentelemetry-tip
 
-OpenTelemetry's _instrumentation libraries_ lay the groundwork for telemetry. They do things like generating spans and metrics from the everyday libraries and frameworks that you use in your app.
+OpenTelemetry の _計装ライブラリ_ は、テレメトリーの基盤を構築します。アプリで使用している日常的なライブラリやフレームワークからスパンやメトリクスを生成します。
 
-Instrumentation libraries are available for many different frameworks and packages, such as Go's native `http` package.
+計装ライブラリは、Go のネイティブ `http` パッケージなど、多くのフレームワークやパッケージに対応しています。
 
 :::
 
 
-## Wrapping up
+## まとめ
 
-In this module you learned how to:
+このモジュールでは、以下のことを学びました:
 
-- See what some typical OpenTelemetry SDK boilerplate code looks like
+- 典型的な OpenTelemetry SDK のボイラープレートコードの確認
 
-- Visualize a Service Map of your OpenTelemetry tracing instrumented services 
+- OpenTelemetry のトレース計装を行ったサービスのサービスマップの視覚化
 
-- Navigate to errored traces, and correlate to logs to find a root cause
+- エラートレースへのナビゲーションと、ログとの相関による根本原因の特定
 
-Most importantly, we didn't need to add extra configuration to our collector. Grafana Alloy received OTLP signals from our services, and forwarded them automatically to Grafana Cloud.
+最も重要なのは、コレクターに追加の設定が不要だったことです。Grafana Alloy はサービスからの OTLP シグナルを受信し、自動的に Grafana Cloud に転送しました。
 
-Click the next module to continue.
+次のモジュールに進むには「次へ」をクリックしてください。
 
 [1]: https://grafana.com/docs/grafana-cloud/monitor-applications/application-observability/instrument/go/

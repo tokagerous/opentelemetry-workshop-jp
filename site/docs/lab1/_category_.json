@@ -1,8 +1,8 @@
 {
-  "label": "Lab 1 - Instrument, collect and export",
+  "label": "Lab 1 - 計装・収集・エクスポート",
   "position": 1,
   "link": {
     "type": "generated-index",
-    "description": "Understand the key telemetry signals, and application instrumentation."
+    "description": "テレメトリーシグナルの基本と、アプリケーションの計装について学びます。"
   }
 }

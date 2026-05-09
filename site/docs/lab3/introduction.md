@@ -2,9 +2,9 @@
 sidebar_position: 1
 ---
 
-# 3.1. Introduction
+# 3.1. はじめに
 
-For this third lab, we're going to investigate a reference environment using Grafana Assistant.
+この 3 つ目のラボでは、Grafana Assistant を使ってリファレンス環境を調査します。
 
-Click to the next module to get started.
+始めるには、次のモジュールに進んでください。
 

@@ -3,50 +3,50 @@ sidebar_position: 1
 slug: /
 ---
 
-# Welcome
+# はじめに
 
-Welcome to this Grafana Labs introduction to OpenTelemetry workshop. 
+Grafana Labs の OpenTelemetry 入門ワークショップへようこそ！
 
-Let's make sure you're all set up.
+まずは環境の準備ができているか確認しましょう。
 
-## Firstly, choose your color mode
+## カラーモードを選ぶ
 
-Prefer reading in light mode, or dark mode? You can pick either.
+ライトモードとダークモード、お好みの方を選べます。
 
-Toggle to your preferred color mode by clicking on the Light icon in the top right corner ⮥
+右上のライトアイコンをクリックして切り替えてください ⬥
 
-## What you'll need
+## 必要なもの
 
-For this workshop, **you'll need to bring**:
+このワークショップで**参加者が用意するもの**:
 
-- An up-to-date web browser, with JavaScript enabled.
-- Some water, so you can stay hydrated!
+- JavaScript が有効な最新の Web ブラウザ
+- 水分補給用のお水！
 
-The **workshop facilitator will provide** you with the following:
+**ワークショップの運営側から提供されるもの**:
 
-- A personal logon (username and password)
-- URLs to **two** Grafana Cloud instances:
-  - **Sandbox instance:** `https://abcd.grafana.net` - you'll be shipping and exploring your signals here
-  - **Reference instance:** `https://abcdappenv.grafana.net` - you'll use this URL to explore a fully-configured OpenTelemetry reference environment
-- URL to access your online development environment
+- 個人用のログイン情報（ユーザー名とパスワード）
+- **2つ** の Grafana Cloud インスタンスの URL:
+  - **Sandbox インスタンス:** `https://abcd.grafana.net` - シグナルの送信と確認に使用
+  - **Reference インスタンス:** `https://abcdappenv.grafana.net` - 設定済みの OpenTelemetry リファレンス環境を探索するために使用
+- オンライン開発環境へのアクセス URL
 
 :::info
-Your logon has been sent to the email address you provided when you signed up. If you haven't received the email, please check your Spam or Junk Mail folder. Or, speak to your facilitator.
+ログイン情報は、登録時に入力されたメールアドレスに送信されています。届いていない場合は、迷惑メールフォルダを確認してください。それでも見つからない場合は、運営担当者にお声がけください。
 :::
 
 
-## What's covered
+## ワークショップの内容
 
-In this workshop, we'll go over the basics of OpenTelemetry with:
+このワークショップでは、OpenTelemetry の基本を以下の内容で学びます:
 
-- Simple exercises to perform in the terminal
+- ターミナルで行うシンプルな演習
 
-- Configuring and running a collector
+- コレクターの設定と実行
 
-- Quizzes at the end of each lab
+- 各ラボ末のクイズ
 
-- Hands-on steps for you to perform in Grafana Cloud
+- Grafana Cloud でのハンズオン作業
 
 
 
-Once you're ready to begin, click the Next button below to move to the first lab.
+準備ができたら、下の「次へ」ボタンをクリックして最初のラボに進みましょう。

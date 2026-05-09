@@ -1,8 +1,8 @@
 {
-  "label": "Lab 3 - AI investigation with Grafana Assistant",
+  "label": "Lab 3 - Grafana Assistant による AI 調査",
   "position": 1,
   "link": {
     "type": "generated-index",
-    "description": "Using Grafana Assistant, explore AI-generated insights into a demo environment."
+    "description": "Grafana Assistant を使って、デモ環境を AI で分析・調査します。"
   }
 }

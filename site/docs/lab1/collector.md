@@ -2,50 +2,50 @@
 sidebar_position: 3
 ---
 
-# 1.2. Configure a Collector
+# 1.2. コレクターの設定
 
-In this module, we will configure a collector to receive OpenTelemetry signals from our application, and ship them to Grafana Cloud.
+このモジュールでは、アプリケーションから OpenTelemetry シグナルを受信し、Grafana Cloud に送信するコレクターを設定します。
 
-## Step 1: Configure Grafana Alloy
+## Step 1: Grafana Alloy の設定
 
-Grafana Alloy is a distribution of the OpenTelemetry Collector, with a Terraform-like syntax for building powerful telemetry pipelines. We will use Alloy to collect and ship your OpenTelemetry signals to Grafana Cloud.
+Grafana Alloy は OpenTelemetry Collector のディストリビューションで、Terraform に似た構文で強力なテレメトリーパイプラインを構築できます。ここでは Alloy を使って、OpenTelemetry シグナルを収集し Grafana Cloud に送信します。
 
-:::opentelemetry-tip[What is an OpenTelemetry collector?]
+:::opentelemetry-tip[OpenTelemetry コレクターとは？]
 
-An OpenTelemetry Collector acts as a bridge between your applications and your telemetry backends. The Collector can receive signals from multiple sources, and send them to multiple destinations. It can also perform transformations on the signals, such as filtering or aggregating them.
+OpenTelemetry Collector は、アプリケーションとテレメトリーバックエンドの橋渡しをします。複数のソースからシグナルを受信し、複数の送信先に転送できます。また、フィルタリングや集約などのシグナル変換も行えます。
 
 :::
 
-For this workshop, we've prepared an Alloy configuration file for you. This configuration will:
+このワークショップでは、あらかじめ Alloy の設定ファイルを用意しています。この設定は以下のことを行います:
 
-- Receive OTLP signals from your application
-- Send them to Grafana Cloud
+- アプリケーションからの OTLP シグナルを受信
+- Grafana Cloud に送信
 
-Follow these steps:
+以下の手順に従ってください:
 
-1.  In the terminal, type the following to copy the example Alloy config file into your persistent workspace:
+1.  ターミナルで以下を入力し、Alloy のサンプル設定ファイルを永続ワークスペースにコピーします:
 
     ```bash
     cp -r /opt/alloy /home/project/persisted/
     ```
 
-1.  Find the new file `persisted/alloy/config.alloy` in the Explorer pane, and open it. Review the content of the configuration file, noting that:
+1.  Explorer ペインで `persisted/alloy/config.alloy` を開きます。設定ファイルの内容を確認し、以下の点に注目してください:
 
-    - There is an `otelcol.receiver.otlp` block, which receives OTLP signals from your application.
+    - `otelcol.receiver.otlp` ブロック: アプリケーションからの OTLP シグナルを受信します。
 
-    - There is an `otelcol.exporter.otlphttp` block, which sends the signals to Grafana Cloud's OTLP endpoint.
+    - `otelcol.exporter.otlphttp` ブロック: シグナルを Grafana Cloud の OTLP エンドポイントに送信します。
 
-    You don't need to do anything with this file, but it's good to know what an Alloy configuration file looks like.
+    このファイルを編集する必要はありませんが、Alloy の設定ファイルがどのようなものか把握しておきましょう。
 
     :::tip
 
-    When you begin to implement OpenTelemetry in your own environment, you can use the Grafana Cloud interface to generate an Alloy configuration file. Navigate to **Connections** and follow the integration tiles to add an OpenTelemetry source.
+    自身の環境で OpenTelemetry を導入する際は、Grafana Cloud のインターフェースから Alloy の設定ファイルを生成できます。**Connections** に移動し、インテグレーションタイルから OpenTelemetry ソースを追加してください。
 
     :::
 
-1.  Find the new file `persisted/alloy/run.sh` in the Explorer pane, and open it.
+1.  Explorer ペインで `persisted/alloy/run.sh` を開きます。
 
-    This script will run Grafana Alloy. You will see that we need to set some environment variables first:
+    このスクリプトで Grafana Alloy を実行します。まず、いくつかの環境変数を設定する必要があります:
 
     ```bash
     export GRAFANA_CLOUD_OTLP_ENDPOINT=""
@@ -53,47 +53,47 @@ Follow these steps:
     export GRAFANA_CLOUD_OTLP_PASSWORD=""
     ```
     
-Let's fill in these variables with the connection details we will get from Grafana Cloud in the next step.
+次のステップで、Grafana Cloud から取得する接続情報をこれらの変数に設定します。
 
-## Step 2: Get Grafana Cloud connection details
+## Step 2: Grafana Cloud の接続情報を取得
 
-In this step, we will grab the endpoint, username and password you need to send your OpenTelemetry signals to Grafana Cloud:
+このステップでは、OpenTelemetry シグナルを Grafana Cloud に送信するために必要なエンドポイント、ユーザー名、パスワードを取得します:
 
-1.  Go to your **Sandbox** Grafana Cloud instance. 
+1.  **Sandbox** の Grafana Cloud インスタンスにアクセスします。
 
-1.  In the side menu, click on **Dashboards**, and navigate to the dashboard **Connection Details**. You can also search for the dashboard by typing "Connection Details" in the search bar.
+1.  サイドメニューの **Dashboards** をクリックし、**Connection Details** ダッシュボードに移動します。検索バーで「Connection Details」と入力して検索することもできます。
 
-1.  On the _Connection Details_ dashboard, copy the **OpenTelemetry (OTLP) endpoint** and paste it in the `alloy/run.sh` file, in the `GRAFANA_CLOUD_OTLP_ENDPOINT` environment variable, similar to this:
+1.  _Connection Details_ ダッシュボードで、**OpenTelemetry (OTLP) endpoint** をコピーし、`alloy/run.sh` ファイルの `GRAFANA_CLOUD_OTLP_ENDPOINT` 環境変数に貼り付けます:
 
     ```bash
     export GRAFANA_CLOUD_OTLP_ENDPOINT="https://..."
     ```
 
-1.  Copy the **OpenTelemetry (OTLP) user ID** and paste it in the `alloy/run.sh` file, in the `GRAFANA_CLOUD_OTLP_USERNAME` environment variable, similar to this:
+1.  **OpenTelemetry (OTLP) user ID** をコピーし、`alloy/run.sh` ファイルの `GRAFANA_CLOUD_OTLP_USERNAME` 環境変数に貼り付けます:
 
     ```bash
     export GRAFANA_CLOUD_OTLP_USERNAME="123456"
     ```
 
-1.  Next, we'll generate a new Cloud Access Policy token to send to Grafana Cloud. In the Grafana side menu, navigate to **Administration &rarr; Users and access &rarr; Cloud access policies**.
+1.  次に、Grafana Cloud に送信するための Cloud Access Policy トークンを生成します。Grafana のサイドメニューから **Administration &rarr; Users and access &rarr; Cloud access policies** に移動します。
 
-1.  Look for a policy which has a name similar to **xxxx-telemetry-publisher-wsa**, expand the Tokens panel, and click **Add token**.
+1.  **xxxx-telemetry-publisher-wsa** のような名前のポリシーを見つけ、Tokens パネルを展開し、**Add token** をクリックします。
 
-1.  Give the token a name of your choosing and ensure expiry is set to **No expiry**, then click **Create**.
+1.  トークンに任意の名前を付け、有効期限を **No expiry** に設定し、**Create** をクリックします。
 
-1.  **Copy** the generated token to your clipboard, and paste it in your `alloy/run.sh` file, placing it in the `GRAFANA_CLOUD_OTLP_PASSWORD` environment variable.
+1.  生成されたトークンをクリップボードに **コピー** し、`alloy/run.sh` ファイルの `GRAFANA_CLOUD_OTLP_PASSWORD` 環境変数に貼り付けます。
 
     ```bash
     export GRAFANA_CLOUD_OTLP_PASSWORD="glc_..."
     ```
 
-1.  **Save** the file once you're finished editing.
+1.  編集が完了したらファイルを **保存** します。
 
-## Step 2: Run Grafana Alloy
+## Step 2: Grafana Alloy の実行
 
-Now we're ready to run Grafana Alloy!
+Grafana Alloy を実行しましょう！
 
-1.  In the terminal, run the following command to start Grafana Alloy:
+1.  ターミナルで以下のコマンドを実行して Grafana Alloy を起動します:
 
     ```bash
     cd /home/project/persisted/alloy
@@ -101,28 +101,26 @@ Now we're ready to run Grafana Alloy!
     ./run.sh
     ```
 
-    You should see Alloy start up, and begin to write some logs to the console. 
+    Alloy が起動し、コンソールにログが出力されます。
 
-    In the logs, you will see two log lines, like "Starting GRPC server" and "Starting HTTP server". This means that Alloy has opened two ports, for receiving OTLP data. Alloy is ready to go.
+    ログの中に「Starting GRPC server」と「Starting HTTP server」の 2 行が表示されます。これは Alloy が OTLP データを受信するための 2 つのポートを開いたことを意味します。Alloy の準備は完了です。
 
-Congratulations! You've just made the first step to collecting and exporting OpenTelemetry signals, by running a collector.
+おめでとうございます！コレクターを実行して、OpenTelemetry シグナルの収集とエクスポートの第一歩を踏み出しました。
 
 :::opentelemetry-tip
 
-For the purposes of this workshop, and to keep things simple, you're running a standalone, foreground instance of Grafana Alloy, inside your development environment.
+このワークショップでは、説明を簡単にするため、開発環境内でスタンドアロンのフォアグラウンドインスタンスとして Grafana Alloy を実行しています。
 
-But in production, you may run Alloy in a different topology. For example, if you're running Kubernetes, you might use Grafana's Kubernetes Monitoring Helm chart, which deploys Alloy to collect OTLP signals from your applications **and** also Prometheus metrics from your underlying Kubernetes infrastructure.
+本番環境では、異なるトポロジーで Alloy を実行する場合があります。例えば Kubernetes を使用している場合は、Grafana の Kubernetes Monitoring Helm chart を使って、アプリケーションからの OTLP シグナル **と** Kubernetes インフラの Prometheus メトリクスの両方を収集する Alloy をデプロイできます。
 
-See [the Alloy documentation](https://grafana.com/docs/grafana-cloud/monitor-applications/application-observability/collector/grafana-alloy-kubernetes/) for more information.
+詳細は [Alloy のドキュメント](https://grafana.com/docs/grafana-cloud/monitor-applications/application-observability/collector/grafana-alloy-kubernetes/)を参照してください。
 
 :::
 
-## Summary
+## まとめ
 
-In this module, you have configured a collector to receive OpenTelemetry signals from your application, and ship them to Grafana Cloud.
+このモジュールでは、アプリケーションから OpenTelemetry シグナルを受信し、Grafana Cloud に送信するコレクターを設定しました。
 
-You have also learned how to configure Grafana Alloy, and how to run it in your development environment.
+Grafana Alloy の設定方法と、開発環境での実行方法についても学びました。
 
-In the next module, you will learn how to instrument your application to send OpenTelemetry signals to Grafana Alloy.
-
-
+次のモジュールでは、アプリケーションに計装を追加し、OpenTelemetry シグナルを Grafana Alloy に送信する方法を学びます。

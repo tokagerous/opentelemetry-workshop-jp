@@ -2,113 +2,113 @@
 sidebar_position: 4
 ---
 
-# End of Lab 1 Quiz
+# Lab 1 の確認クイズ
 
 import Quiz from '@site/src/components/Quiz';
 
 {/* prettier-ignore */}
 export const questions = [
   {
-    question_text: "What is OpenTelemetry?",
+    question_text: "OpenTelemetry とは何ですか？",
     explanation:
-      "OpenTelemetry is a set of tools and standards for observability.",
+      "OpenTelemetry は、オブザーバビリティのためのツール群と標準仕様のセットです。",
     choices: [
       {
-        choice_text: "A programming language",
+        choice_text: "プログラミング言語",
         is_correct: false,
       },
       {
-        choice_text: "A set of tools and standards for observability",
+        choice_text: "オブザーバビリティのためのツール群と標準仕様",
         is_correct: true,
       },
       {
-        choice_text: "A database for storing telemetry",
+        choice_text: "テレメトリーを保存するためのデータベース",
         is_correct: false,
       },
       {
-        choice_text: "An application development framework",
+        choice_text: "アプリケーション開発フレームワーク",
         is_correct: false,
       },
     ],
   },
   {
-    question_text: 'What is a "span" in the context of OpenTelemetry?',
+    question_text: 'OpenTelemetry における「span」とは何ですか？',
     explanation:
-      "In OpenTelemetry, a span is a unit of work or operation, which is the building block of a Trace.",
+      "OpenTelemetry における span は、処理や操作の1単位であり、Trace を構成する基本要素です。",
     choices: [
       {
-        choice_text: "A type of database query",
+        choice_text: "データベースクエリの一種",
         is_correct: false,
       },
       {
         choice_text:
-          "A unit of work or operation, which is the building block of a Trace",
+          "処理や操作の1単位で、Trace を構成する基本要素",
         is_correct: true,
       },
       {
-        choice_text: "A user interface component",
+        choice_text: "ユーザーインターフェースの部品",
         is_correct: false,
       },
       {
-        choice_text: "A network protocol",
+        choice_text: "ネットワークプロトコル",
         is_correct: false,
       },
     ],
   },
   {
-    question_text: "In OpenTelemetry, what is a resource?",
+    question_text: "OpenTelemetry における resource とは何ですか？",
     explanation:
-      "In OpenTelemetry, a resource is a set of attributes that describe the entity producing telemetry data.",
+      "OpenTelemetry における resource は、テレメトリーデータを生成する実体を表す属性の集合です。",
     choices: [
       {
         choice_text:
-          "A set of attributes that describe the entity producing telemetry data",
+          "テレメトリーデータを生成する実体を表す属性の集合",
         is_correct: true,
       },
       {
-        choice_text: "A type of database used to store telemetry data",
+        choice_text: "テレメトリーデータの保存に使うデータベースの種類",
         is_correct: false,
       },
       {
         choice_text:
-          "A user interface component for visualizing telemetry data",
+          "テレメトリーデータを可視化する UI コンポーネント",
         is_correct: false,
       },
       {
-        choice_text: "A network protocol for transmitting telemetry data",
+        choice_text: "テレメトリーデータを送信するためのネットワークプロトコル",
         is_correct: false,
       },
     ],
   },
   {
-    question_text: "In OpenTelemetry, what is a resource attribute?",
+    question_text: "OpenTelemetry における resource attribute とは何ですか？",
     explanation:
-      "In OpenTelemetry, a resource attribute is metadata that describes the entity producing the telemetry data, such as a service name or instance ID.",
+      "OpenTelemetry における resource attribute は、サービス名やインスタンス ID など、テレメトリーを生成する実体を表すメタデータです。",
     choices: [
       {
-        choice_text: "A configuration parameter used to customize log output",
+        choice_text: "ログ出力をカスタマイズするための設定パラメーター",
         is_correct: false,
       },
       {
-        choice_text: "A network protocol for transmitting telemetry data",
+        choice_text: "テレメトリーデータを送信するためのネットワークプロトコル",
         is_correct: false,
       },
       {
-        choice_text: "A type of document",
+        choice_text: "ドキュメントの種類",
         is_correct: false,
       },
       {
         choice_text:
-          "Metadata that describes the entity producing the telemetry data, such as a service name or instance ID",
+          "サービス名やインスタンス ID など、テレメトリーを生成する実体を表すメタデータ",
         is_correct: true,
       },
     ],
   },
   {
     question_text:
-      "Which attribute in OpenTelemetry should be used to uniquely identify an instance of a service?",
+      "OpenTelemetry でサービスのインスタンスを一意に識別するには、どの属性を使うべきですか？",
     explanation:
-      "In OpenTelemetry, the 'service.instance.id' attribute uniquely identifies an instance of a service.",
+      "OpenTelemetry では、`service.instance.id` 属性を使ってサービスのインスタンスを一意に識別します。",
     choices: [
       {
         choice_text: "service.instance.id",
@@ -131,8 +131,8 @@ export const questions = [
 ];
 
 
-Now's your chance to prove what you've learned in this part of the workshop. 
+ここまで学んだ内容を、クイズで確認してみましょう。
 
-See if you can answer the following questions:
+次の問題に答えてみてください:
 
 <Quiz questions={questions}></Quiz>
