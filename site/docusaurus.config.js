@@ -13,15 +13,16 @@ const config = {
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
-  url: 'https://grafana.github.io',
+  url: 'https://tokagerous.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/opentelemetry-workshop/',
+  baseUrl: '/opentelemetry-workshop-jp/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'grafana', // Usually your GitHub org/user name.
-  projectName: 'opentelemetry-workshop', // Usually your repo name.
+  organizationName: 'tokagerous', // Usually your GitHub org/user name.
+  projectName: 'opentelemetry-workshop-jp', // Usually your repo name.
+  trailingSlash: false,
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -77,7 +78,7 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/grafana/opentelemetry-workshop/tree/main/site/',
+            'https://github.com/tokagerous/opentelemetry-workshop-jp/tree/main/site/',
           admonitions: {
             keywords: ['opentelemetry-tip'],
             extendDefaults: true,
@@ -104,7 +105,7 @@ const config = {
         },
         items: [
           {
-            href: 'https://github.com/grafana/opentelemetry-workshop',
+            href: 'https://github.com/tokagerous/opentelemetry-workshop-jp',
             label: 'GitHub',
             position: 'right',
           },
@@ -135,7 +136,7 @@ const config = {
             items: [
               {
                 label: 'GitHub',
-                href: 'https://github.com/grafana/opentelemetry-workshop',
+                href: 'https://github.com/tokagerous/opentelemetry-workshop-jp',
               },
             ],
           },
